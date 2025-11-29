@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Konarak Food & Beverages — Website</title>
+
+<style>
+  :root{
+    --accent:#f28c2b;
+    --dark:#2b2b2b;
+    --muted:#666;
+    --bg:#faf8f6;
+    --card:#fff;
+    --maxw:1100px;
+  }
+  *{box-sizing:border-box}
+  body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;background:#fff;color:var(--dark)}
+  header{background:var(--accent);color:white;padding:14px 12px;position:sticky;top:0;z-index:40}
+  .container{max-width:var(--maxw);margin:0 auto;padding:18px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand img{width:46px;height:46px;object-fit:contain;border-radius:6px;background:white;padding:4px}
+  nav{display:flex;align-items:center;justify-content:space-between}
+  .nav-links{display:flex;gap:8px;align-items:center}
+  .nav-links a, .dropdown-btn{
+    color:white;text-decoration:none;padding:8px 10px;border-radius:6px;font-size:14px;
+  }
+  .dropdown{position:relative}
+  .dropdown-menu{
+    position:absolute;top:44px;left:0;min-width:200px;background:white;color:var(--dark);
+    box-shadow:0 6px 20px rgba(0,0,0,.12);border-radius:8px;padding:8px;display:none
+  }
+  .dropdown-menu a{
+    display:block;padding:8px;border-radius:6px;color:var(--dark);text-decoration:none
+  }
+  .dropdown-menu a:hover{background:#f2f2f2}
+  .hamburger{display:none;background:transparent;border:0;color:white;font-size:22px}
+  main{padding:28px 12px}
+  .hero{background:#fff;padding:36px;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.04);display:flex;gap:24px}
+  .hero .left{flex:1}
+  .hero .right{text-align:center}
+  .card{background:#fff;padding:16px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.04)}
+  .small{font-size:13px;color:var(--muted)}
+  footer{padding:18px 12px;background:#fff;border-top:1px solid #eee}
+  label{display:block;margin-top:8px;font-weight:600;font-size:13px}
+  input,textarea,select{
+    width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-top:6px
+  }
+  button{background:var(--accent);color:white;border:0;padding:10px 12px;border-radius:8px;cursor:pointer}
+  .small-btn{padding:8px 10px;font-size:13px}
+  .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+  .gallery-grid img{width:100%;height:120px;object-fit:cover;border-radius:8px}
+  .file-preview img{width:70px;height:70px;object-fit:cover;border-radius:6px;margin-top:6px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:640px){
+    .two-col{grid-template-columns:1fr}
+    .nav-links{display:none}
+    .hamburger{display:block}
+    .hero{flex-direction:column}
+  }
+</style>
+</head>
+
+<body>
+<header>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between">
+    <div class="brand" onclick="navigate('#home')" style="cursor:pointer">
+      <img id="site-logo" src="assets/logo.png" onerror="this.src=''" />
+      <div>
+        <h1 style="font-size:18px;margin:0">Konarak Food & Beverages</h1>
+        <div class="small" id="header-sub">Cognizant, Hitech City, Hyderabad</div>
+      </div>
+    </div>
+
+    <nav>
+      <div class="nav-links">
+
+        <a href="#home" onclick="navigate('#home')">Home</a>
+        <a href="#about" onclick="navigate('#about')">About</a>
+        <a href="#gallery" onclick="navigate('#gallery')">Gallery</a>
+
+        <div class="dropdown">
+          <button class="dropdown-btn" onclick="toggleDropdown('staff-menu')">Staff ▾</button>
+          <div class="dropdown-menu" id="staff-menu">
+            <a href="#staff/application" onclick="navigate('#staff/application')">Application</a>
+            <a href="#staff/login" onclick="navigate('#staff/login')">Login</a>
+          </div>
+        </div>
+
+        <!-- Updated: external Records links -->
+        <div class="dropdown">
+          <button class="dropdown-btn">Records ▾</button>
+          <div class="dropdown-menu">
+            <a href="https://konarakfb.github.io/form/" target="_blank">Dry Store</a>
+            <a href="https://konarakfb.github.io/sales/" target="_blank">Food Sales</a>
+          </div>
+        </div>
+
+        <!-- Added: FSSAI button -->
+        <a href="https://konarakfb.github.io/checklist/" target="_blank">FSSAI</a>
+
+        <a href="#contact" onclick="navigate('#contact')">Contact</a>
+      </div>
+
+      <button class="hamburger" onclick="toggleMobile()">☰</button>
+    </nav>
+  </div>
+</header>
+
+<main class="container" id="main-content"></main>
+
+<footer>
+  <div class="container" style="display:flex;justify-content:space-between">
+    <div class="small">© Konarak Food & Beverages — FSSAI: 13624013000747</div>
+    <div class="small">Internal use only</div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+const COMPANY = {
+  name:"Konarak Food & Beverages",
+  fssai:"13624013000747",
+  address:"Cognizant Technology Solutions India Pvt Ltd, Mindspace Hitech City, Hyderabad",
+  logoPath:"assets/logo.png"
+};
+
+/* NAVIGATION */
+function navigate(h){location.hash=h;render();}
+function toggleDropdown(id){
+  const m=document.getElementById(id);
+  m.style.display=m.style.display==="block"?"none":"block";
+}
+function toggleMobile(){
+  const n=document.querySelector('.nav-links');
+  n.style.display=n.style.display==="block"?"none":"block";
+}
+
+/* RENDER PAGES */
+function render(){
+  const h=location.hash||"#home";
+  const m=document.getElementById("main-content");
+
+  if(h==="#about") m.innerHTML=aboutHtml();
+  else if(h==="#gallery") { m.innerHTML=galleryHtml(); bindGallery(); }
+  else if(h.startsWith("#staff/application")){ m.innerHTML=staffAppHtml(); bindStaffApp(); }
+  else if(h.startsWith("#staff/login")){ m.innerHTML=loginHtml(); bindLogin(); }
+  else if(h==="#contact"){ m.innerHTML=contactHtml(); bindContact(); }
+  else m.innerHTML=homeHtml();
+}
+
+/* HOME */
+function homeHtml(){
+return `
+<div class="hero">
+  <div class="left">
+    <h2>Welcome to ${COMPANY.name}</h2>
+    <p class="small">We provide food services at Cognizant facilities, ensuring quality and compliance.</p>
+    <button onclick="navigate('#staff/application')">Apply for Staff</button>
+  </div>
+  <div class="right">
+    <img src="${COMPANY.logoPath}" style="width:140px" onerror="this.style.display='none'">
+    <p class="small">${COMPANY.address}</p>
+  </div>
+</div>
+`;
+}
+
+/* ABOUT */
+function aboutHtml(){
+return `
+<div class="card">
+  <h2>About Us</h2>
+  <p class="small">${COMPANY.name} provides canteen services and food operations inside Cognizant buildings.</p>
+  <p class="small"><strong>FSSAI:</strong> ${COMPANY.fssai}</p>
+</div>`;
+}
+
+/* GALLERY */
+function galleryHtml(){
+return `
+<h2>Gallery</h2>
+<div class="card">
+  <input id="gallery-upload" type="file" accept="image/*" multiple>
+  <div id="gallery-grid" class="gallery-grid"></div>
+</div>`;
+}
+function bindGallery(){
+  const up=document.getElementById("gallery-upload");
+  const grid=document.getElementById("gallery-grid");
+  const list=JSON.parse(localStorage.getItem("konarak.gallery")||"[]");
+  grid.innerHTML=list.map(i=>`<img src="${i}">`).join("");
+  up.onchange=async e=>{
+    const files=[...e.target.files];
+    for(const f of files){
+      const r=await fileToDataURL(f,800);
+      list.unshift(r);
+    }
+    localStorage.setItem("konarak.gallery",JSON.stringify(list.slice(0,80)));
+    grid.innerHTML=list.map(i=>`<img src="${i}">`).join("");
+  };
+}
+
+/* STAFF APPLICATION */
+function staffAppHtml(){
+return `
+<h2>Staff Application</h2>
+<div class="card">
+  <label>Name</label><input id="app-name">
+  <label>Mobile</label><input id="app-mobile">
+  <label>Email</label><input id="app-email">
+  <label>Address</label><textarea id="app-address"></textarea>
+  <label>Position</label><input id="app-position">
+  <label>Start Date</label><input id="app-date" type="date">
+
+  <label>Photo</label><input id="file-photo" type="file"><div id="preview-photo"></div>
+  <label>Aadhaar</label><input id="file-aadhaar" type="file"><div id="preview-aadhaar"></div>
+  <label>PAN</label><input id="file-pan" type="file"><div id="preview-pan"></div>
+  <label>Medical</label><input id="file-med" type="file"><div id="preview-med"></div>
+
+  <button id="save-app">Save</button>
+  <button id="download-app" class="small-btn">PDF</button>
+  <div id="app-msg" class="small"></div>
+</div>`;
+}
+
+function bindStaffApp(){
+  bindFile("file-photo","preview-photo","konarak.app.photo");
+  bindFile("file-aadhaar","preview-aadhaar","konarak.app.aadhaar");
+  bindFile("file-pan","preview-pan","konarak.app.pan");
+  bindFile("file-med","preview-med","konarak.app.med");
+
+  document.getElementById("save-app").onclick=()=>{
+    const app={
+      name:val("app-name"), mobile:val("app-mobile"),email:val("app-email"),
+      address:val("app-address"),position:val("app-position"),date:val("app-date"),
+      photo:localStorage.getItem("konarak.app.photo")||"",
+      aadhaar:localStorage.getItem("konarak.app.aadhaar")||"",
+      pan:localStorage.getItem("konarak.app.pan")||"",
+      medical:localStorage.getItem("konarak.app.med")||"",
+      ts:new Date().toISOString()
+    };
+    const arr=JSON.parse(localStorage.getItem("konarak.applications")||"[]");
+    arr.unshift(app);
+    localStorage.setItem("konarak.applications",JSON.stringify(arr));
+    document.getElementById("app-msg").innerText="Saved.";
+  };
+
+  document.getElementById("download-app").onclick=async()=>{
+    const wrap=document.createElement("div");
+    wrap.style.padding="20px";
+    wrap.innerHTML=`<h2>Staff Application</h2>
+    <p>Name: ${val("app-name")}</p>
+    <p>Mobile: ${val("app-mobile")}</p>`;
+    document.body.appendChild(wrap);
+    await exportPDF(wrap,"application.pdf");
+    wrap.remove();
+  };
+}
+
+/* LOGIN */
+function loginHtml(){
+return `
+<h2>Staff Login</h2>
+<div class="card">
+  <label>Email</label><input id="login-user">
+  <label>Password</label><input id="login-pass">
+  <button id="btn-login">Login</button>
+  <button id="btn-register" class="small-btn">Register</button>
+  <div id="login-msg" class="small"></div>
+</div>`;
+}
+
+function bindLogin(){
+  document.getElementById("btn-register").onclick=()=>{
+    const u=val("login-user"),p=val("login-pass");
+    const users=JSON.parse(localStorage.getItem("konarak.users")||"{}");
+    users[u]=p;
+    localStorage.setItem("konarak.users",JSON.stringify(users));
+    set("login-msg","Registered.");
+  };
+  document.getElementById("btn-login").onclick=()=>{
+    const u=val("login-user"),p=val("login-pass");
+    const users=JSON.parse(localStorage.getItem("konarak.users")||"{}");
+    if(users[u]===p) set("login-msg","Login OK");
+    else set("login-msg","Invalid");
+  };
+}
+
+/* CONTACT */
+function contactHtml(){
+return `
+<h2>Contact</h2>
+<div class="card">
+  <label>Name</label><input id="cname">
+  <label>Email</label><input id="cemail">
+  <label>Message</label><textarea id="cmsg"></textarea>
+  <button id="csend">Send</button>
+  <div id="cnote" class="small"></div>
+</div>`;
+}
+function bindContact(){
+  document.getElementById("csend").onclick=()=>{
+    const msgs=JSON.parse(localStorage.getItem("konarak.contact")||"[]");
+    msgs.push({name:val("cname"),email:val("cemail"),msg:val("cmsg")});
+    localStorage.setItem("konarak.contact",JSON.stringify(msgs));
+    set("cnote","Saved locally.");
+  };
+}
+
+/* UTIL */
+function val(id){return document.getElementById(id).value.trim();}
+function set(id,v){document.getElementById(id).innerText=v;}
+
+function bindFile(inp,prev,key){
+  const i=document.getElementById(inp);
+  const p=document.getElementById(prev);
+  const ex=localStorage.getItem(key);
+  if(ex) p.innerHTML=`<img src="${ex}">`;
+  i.onchange=async e=>{
+    const f=e.target.files[0];
+    if(!f) return;
+    const d=await fileToDataURL(f,1000);
+    localStorage.setItem(key,d);
+    p.innerHTML=`<img src="${d}">`;
+  };
+}
+
+async function fileToDataURL(file,max){
+  return new Promise(res=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        let w=img.width,h=img.height;
+        if(w>max||h>max){
+          const s=max/Math.max(w,h); w*=s;h*=s;
+        }
+        const c=document.createElement("canvas");
+        c.width=w;c.height=h;
+        c.getContext("2d").drawImage(img,0,0,w,h);
+        res(c.toDataURL("image/jpeg",0.7));
+      };
+      img.src=e.target.result;
+    };
+    r.readAsDataURL(file);
+  });
+}
+
+/* PDF Export */
+async function exportPDF(el,name){
+  const c=await html2canvas(el,{scale:1});
+  const img=c.toDataURL("image/jpeg",0.75);
+  const { jsPDF } = window.jspdf;
+  const pdf=new jsPDF();
+  pdf.addImage(img,"JPEG",10,10,180,0);
+  pdf.save(name);
+}
+
+render();
+</script>
+
+</body>
+</html>
