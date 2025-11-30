@@ -15,6 +15,8 @@
   }
   *{box-sizing:border-box}
   body{font-family:Inter,Arial,sans-serif;margin:0;background:#fff;color:var(--dark)}
+
+  /* TOP BAR */
   .topbar{
     background:var(--accent);color:#fff;
     padding:10px 15px;display:flex;justify-content:space-between;align-items:center;
@@ -39,7 +41,7 @@
 
   .dropdown{position:relative}
   .dropdown-menu{
-    position:absolute;top:38px;left:0;width:180px;background:#fff;border-radius:8px;
+    position:absolute;top:38px;left:0;width:200px;background:#fff;border-radius:8px;
     box-shadow:0 6px 20px rgba(0,0,0,.12);display:none;z-index:50;
   }
   .dropdown-menu a{
@@ -124,6 +126,7 @@
   <div id="mrecords" class="side-submenu">
     <a href="https://konarakfb.github.io/form/" target="_blank">Dry Store</a>
     <a href="https://konarakfb.github.io/sales/" target="_blank">Food Sales</a>
+    <a href="https://konarakfb.github.io/quality/" target="_blank">Food Quality</a>
   </div>
 
   <a href="https://konarakfb.github.io/checklist/" target="_blank">FSSAI</a>
@@ -149,6 +152,7 @@
     <div id="records-menu" class="dropdown-menu">
       <a href="https://konarakfb.github.io/form/" target="_blank">Dry Store</a>
       <a href="https://konarakfb.github.io/sales/" target="_blank">Food Sales</a>
+      <a href="https://konarakfb.github.io/quality/" target="_blank">Food Quality</a>
     </div>
   </div>
 
@@ -159,6 +163,7 @@
 <!-- MAIN -->
 <main id="main"></main>
 
+<!-- JS LIBS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -250,7 +255,6 @@ return `
   <label>Address</label><textarea id="aaddress"></textarea>
   <label>Position</label><input id="aposition">
   <label>Date</label><input id="adate" type="date">
-
   <button id="saveapp">Save</button>
 </div>`;
 }
